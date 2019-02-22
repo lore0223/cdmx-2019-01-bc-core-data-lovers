@@ -1,4 +1,26 @@
 window.pokesaurius = {
+//función que  manipule la data y  me traiga solo una pequeña parte
+// getDataPokemon:(data)=>{
+//   data.forEach(element=>{
+//   const result=`<div id="${element.id}" class="wrapper">
+//                 <div class="pokemon-card"> 
+//                 <div class="pokemon-card-image">
+//                 <img src="${element.img}">
+//                 </div>
+//                 <div class="box-card">
+//                 <p>Número:${element.num}</p>
+//                 <p>${element.name}</p>
+//                 <p>${element.next_evolution[0,1].name}</p>
+//                 <p>${element.type}</p>
+//                 <p>${}
+
+//                 </div>
+//                 </div>
+//                 </div>`
+               
+//   })
+// },
+
   //función de filtrar
   typeFilter: (data, pokemonElegido) => {
     const filterPokemonType = data.filter(element => element.type.includes(pokemonElegido));
@@ -17,6 +39,8 @@ window.pokesaurius = {
   },
 
 }
+
+
 
 
 
