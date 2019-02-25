@@ -4,7 +4,6 @@ const pokemonPage = document.getElementById('pokemon-page'); //página de pokemo
 const initialPokeballButton = document.getElementById('pokeball-button');
 const printList = document.getElementById('print-list');
 const buttonFilterByType = document.getElementsByClassName('button-filter-by-type');
-const menuUndo = document.getElementById('menu-undo');
 const weight = document.getElementById('weight');
 const counterCollection = document.getElementById('counter-collection');
 const printType = document.getElementById('print-type');
@@ -17,42 +16,58 @@ initialPokeballButton.addEventListener('click', () => { // ocultar página de in
    pokemonPage.classList.remove('hideElement');
   });
 
-menuUndo.addEventListener('click', () => {
-  printList.innerHTML = '';
-  print(data)
-});
-
-
-fetch('./data/pokemon/pokemon.json')
-.then(response => response.json())
-.then(pokemonJson => {
- data= pokemonJson.pokemon;
-print(data)
-})
+  
+  
+  
+  fetch('./data/pokemon/pokemon.json')
+  .then(response => response.json())
+  .then(pokemonJson => {
+    const arrData=pokemonJson.pokemon;
+    const data=window.pokesaurius.getDataPokemon(arrData);
+    localStorage.setItem(data,JSON.stringify(arrData))
+    print(data)
+    return data
+  })
+   .then(newData => filterByPokemon(newData))
+  // .then()
+  
+  
+  .catch(err => console.error(err))
+  
 
   const print = (data) => { //imprime la data//
     let totalWeight = 0; //Contador que  guarda el peso de los pokemon
     data.forEach(element => {
       totalWeight += parseFloat(element.weight);
       let result = `<div id="${element.id}" class="wrapper">
-          <div class="pokemon-card"> 
-          <div class="pokemon-card-image">
-          <img src="${element.img}">
-          </div>
-          <div class="box-card">
-          <p>Número:${element.num}</p>
-          <p>${element.name}</p>
-          </div>
-          </div>
-          </div>`
+      <div class="pokemon-card"> 
+      <div class="pokemon-card-image">
+      <img src="${element.img}">
+      </div>
+      <div class="box-card">
+      <p>Número:${element.num}</p>
+      <p>${element.name}</p>
+      </div>
+      </div>
+      </div>`
       printList.insertAdjacentHTML("beforeend", result); //insertAdjacentHTML renderiza cada iteración y  coloca los elementos uno después del otro.
-     return print;
-   });
-   const averageWeight = totalWeight / data.length; //saca promedio del peso//
+      return print;
+    });
+    const averageWeight = totalWeight / data.length; //saca promedio del peso//
     weight.innerHTML = averageWeight.toFixed(2); //To Fixed 2 te da solo 2 decimales del resultado  final de la división
-    //counterCollection.innerHTML = data.length;
+    counterCollection.innerHTML = data.length;
   };
+  
+
+  const menuUndo = document.getElementById('menu-undo');  
+    menuUndo.addEventListener('click', () => {
+    printList.innerHTML ='';
     
+    print(data)
+    });
+  
+    
+const  filterByPokemon = (data) => {
   for (let i = 0; i < buttonFilterByType.length; i++) {
     buttonFilterByType[i].addEventListener('click', () => {
       aside.classList.add('hideElement'); //oculta el aside en versión ipad y mobile//
@@ -63,6 +78,7 @@ print(data)
       printType.innerHTML = pokemonElegido; //imprime el id en la seccion de sabias que?
     });
   }
+}
 
   alphabeticOrderButton.addEventListener('click', () => { //función que invoca ala función de ordenar A-Z y la renderiza
     printList.innerHTML = '';
@@ -91,3 +107,5 @@ print(data)
 
 
   //local storage puede guardar un string solo acepta strings json.stringyfy ()los convierte 
+  //localStorage.setItem('data,JSON.stringify(arrData))mandar el dato
+  //localStorage.getItem('data')
