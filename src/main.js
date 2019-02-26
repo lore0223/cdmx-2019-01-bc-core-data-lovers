@@ -8,7 +8,7 @@ const buttonFilterByType = document.getElementsByClassName('button-filter-by-typ
 const weight = document.getElementById('weight');
 const counterCollection = document.getElementById('counter-collection');
 const printType = document.getElementById('print-type');
-const alphabeticOrderButton = document.getElementById('totales'); //id está en español porque se muestra como parte de la información de la página
+const alphabeticOrderButton = document.getElementsByClassName('type-button'); //id está en español porque se muestra como parte de la información de la página
 const menuToggle = document.getElementById('menu-toggle');
 const aside = document.getElementById('aside');
 
@@ -28,15 +28,10 @@ fetch('./data/pokemon/pokemon.json')
   return dataJson
 })
 .then(newData => filterByPokemon(newData))
- .catch(err => console.error(err))
+.then(resultado => sortByPokemonName(resultado))
+ //.catch(err => console.error(err))
 
-console.log(dataJson)
-// const fetchPokemon = () => { 
-//   
-// };
-// fetchPokemon()
 
-  
 
   const print = (dataJson) => { //imprime la data//
     let totalWeight = 0; //Contador que  guarda el peso de los pokemon
@@ -63,33 +58,38 @@ console.log(dataJson)
   
 
   const menuUndo = document.getElementById('menu-undo');  
-  const homme = menuUndo.addEventListener('click', () => {
+  menuUndo.addEventListener('click', () => {
    printList.innerHTML ='';
    print(dataJson)
     
     });
   
     
-const  filterByPokemon = (dataJson) => {
+    const  filterByPokemon = (dataJson) => {
+      let pokemonFiltrados = []
   for (let i = 0; i < buttonFilterByType.length; i++) {
     buttonFilterByType[i].addEventListener('click', () => {
       aside.classList.add('hideElement'); //oculta el aside en versión ipad y mobile//
       let pokemonElegido = buttonFilterByType[i].id //esta let guarda la elección del usuario por medio del click y nos trae la posición y el id del boton.
       printList.innerHTML = ''; //limpia la página antes de renderizar los pokémon filtrados
-      const pokemonFiltrados = window.pokesaurius.typeFilter(dataJson, pokemonElegido); //es la invocación de la función que filtra
-      print(pokemonFiltrados)
+      const pokemonFiltrados  = window.pokesaurius.typeFilter(dataJson, pokemonElegido); //es la invocación de la función que filtra
       printType.innerHTML = pokemonElegido; //imprime el id en la seccion de sabias que?
+      print(pokemonFiltrados)
+      sortByPokemonName(pokemonFiltrados)
     });
   }
+  return pokemonFiltrados
 }
-
-
-    alphabeticOrderButton.addEventListener('click', () => { //función que invoca ala función de ordenar A-Z y la renderiza
+//función que ordena A-Z y la renderiza
+ const sortByPokemonName= (data) => { 
+   for (let i = 0; i < alphabeticOrderButton.length; i++) 
+    alphabeticOrderButton[i].addEventListener('click', () => { 
+      let sortBy= alphabeticOrderButton[i].id;
       printList.innerHTML ='';
-    const resultSortByName = window.pokesaurius.sortByName(dataJson);
+    const resultSortByName = window.pokesaurius.sortByName(data,sortBy);
     print(resultSortByName);
   });
-  
+}
 
   menuToggle.addEventListener('click', () => {
    aside.classList.remove('hideElement');

@@ -27,16 +27,30 @@ window.pokesaurius = {
     return filterPokemonType
   },
   //función para ordenar
-  sortByName: (data) => {
-    const orderPokemonName = data.sort((a, b) => {
-      if (a.name > b.name) {
-        return 1;
-      } else {
-        return -1;
-      }
-    })
-    return (orderPokemonName)
-  },
+  sortByName: (data,sortBy) => {
+   switch(sortBy){
+     case'totales-ascendente':
+     return data.sort((a,b) => (a.name > b.name ) && -1);
+
+     case 'totales-descendente':
+     return data.sort((a,b) => (a.name < b.name) && -1)
+   }
+
+
+
+
+
+  }
+
+  //   const orderPokemonName = data.sort((a, b) => {
+  //     if (a.name > b.name) {
+  //       return 1;
+  //     } else {
+  //       return -1;
+  //     }
+  //   })
+  //   return (orderPokemonName)
+  // },
 
 }
 
